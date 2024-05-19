@@ -28,9 +28,9 @@ module "eks" {
     eks-pod-identity-agent = {
       most_recent = true
     }
-    # aws-guardduty-agent = {
-    #   most_recent = true
-    # }
+    aws-guardduty-agent = {
+      most_recent = true
+    }
 
   }
   # Give the Terraform identity admin access to the cluster
