@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collector
+  namespace: default
+  labels:
+    app: collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collector
+  template:
+    metadata:
+      labels:
+        app: collector
+    spec:
+      serviceAccountName: collector-sa
+      containers:
+      - name: collector
+        image: public.ecr.aws/aws-cli/aws-cli:2.15.53
+        command: ["sleep"]
+        args: ["infinity"]
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 50Mi
+        
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: collector-sa
+  namespace: default

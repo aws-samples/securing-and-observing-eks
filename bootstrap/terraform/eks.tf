@@ -55,4 +55,7 @@ module "eks" {
   tags = merge(local.tags, {
     "karpenter.sh/discovery" = local.name
   })
+
+  depends_on = [aws_vpc_endpoint.guardduty]
+
 }
