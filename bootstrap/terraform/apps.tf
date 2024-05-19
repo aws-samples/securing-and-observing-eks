@@ -25,9 +25,10 @@ resource "kubernetes_deployment_v1" "collector" {
 
       spec {
         container {
-          image = "public.ecr.aws/aws-cli/aws-cli:2.15.53"
-          name  = "collector"
-          args  = ["s3", "ls"]
+          image   = "public.ecr.aws/aws-cli/aws-cli:2.15.53"
+          name    = "collector"
+          command = ["sleep"]
+          args    = ["infinity"]
 
           resources {
             limits = {
@@ -44,7 +45,7 @@ resource "kubernetes_deployment_v1" "collector" {
       }
     }
   }
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_service_account_v1" "collector" {
@@ -52,7 +53,7 @@ resource "kubernetes_service_account_v1" "collector" {
     name      = "collector-sa"
     namespace = "default"
   }
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_deployment_v1" "threat" {
@@ -118,7 +119,7 @@ resource "kubernetes_deployment_v1" "threat" {
       }
     }
   }
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_role_binding_v1" "threat" {
@@ -136,5 +137,5 @@ resource "kubernetes_role_binding_v1" "threat" {
     name      = "default"
     namespace = "kube-system"
   }
-  depends_on = [ module.eks ]
+  depends_on = [module.eks]
 }

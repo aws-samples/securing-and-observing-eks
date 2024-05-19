@@ -40,7 +40,7 @@ module "eks" {
 
   eks_managed_node_groups = {
     default = {
-      instance_types = ["m5.large", "m5a.large"]
+      instance_types             = ["m5.large", "m5a.large"]
       iam_role_attach_cni_policy = true
 
       min_size     = 1
