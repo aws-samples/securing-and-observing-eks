@@ -3,18 +3,18 @@
 ################################################################################
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 21.5"
+  version = "~> 21.1"
 
-  cluster_name                   = local.name
-  cluster_version                = var.version
-  cluster_endpoint_public_access = true
+  name                   = local.name
+  kubernetes_version     = var.kubernetes_version
+  endpoint_public_access = true
 
-  cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-  cluster_addons = {
+  addons = {
     aws-guardduty-agent = {
       most_recent = true
     }

@@ -9,7 +9,7 @@ data "aws_region" "current" {}
 
 locals {
   name   = var.name
-  region = data.aws_region.current.name
+  region = data.aws_region.current.region
   tags = {
     Sample     = local.name
     GithubRepo = "github.com/aws-samples/securing-and-observing-eks"
