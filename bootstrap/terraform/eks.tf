@@ -20,6 +20,7 @@ module "eks" {
     }
   }
 
+  authentication_mode = "API"
   enable_cluster_creator_admin_permissions = true
 
   compute_config = {
