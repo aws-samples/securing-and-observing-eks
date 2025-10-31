@@ -25,7 +25,7 @@ resource "aws_iam_role_policy_attachment" "s3_read_only" {
 }
 
 resource "aws_iam_role" "containerinsight_role" {
-  name               = "AmazonEKSPodIdentityAmazonCloudWatchObservabilityRole"
+  name               = "PodIdentityAmazonCloudWatchObservabilityRole"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
