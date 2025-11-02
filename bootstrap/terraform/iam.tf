@@ -30,6 +30,6 @@ resource "aws_iam_role" "containerinsight_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "containerinsight_role" {
-  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
   role       = aws_iam_role.containerinsight_role.name
 }
