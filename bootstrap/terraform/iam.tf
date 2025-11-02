@@ -23,3 +23,13 @@ resource "aws_iam_role_policy_attachment" "s3_read_only" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
   role       = aws_iam_role.s3_read_only.name
 }
+
+resource "aws_iam_role" "containerinsight_role" {
+  name               = "PodIdentityAmazonCloudWatchObservabilityRole"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_iam_role_policy_attachment" "containerinsight_role" {
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+  role       = aws_iam_role.containerinsight_role.name
+}
