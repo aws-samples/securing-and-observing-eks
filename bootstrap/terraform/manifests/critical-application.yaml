@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: critical-application
+  labels:
+    app: critical-application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: critical-application
+  template:
+    metadata:
+      labels:
+        app: critical-application
+    spec:
+      containers:
+      - name: critical-application
+        image: python:3.11-alpine
+        command: ["python", "-u", "/app/log_generator.py"]
+        volumeMounts:
+        - name: script-volume
+          mountPath: /app
+      volumes:
+      - name: script-volume
+        configMap:
+          name: critical-application-script
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: critical-application-script
+data:
+  log_generator.py: |
+    import time
+    import random
+    import datetime
+    import traceback
+
+    log_levels = ["INFO", "WARN", "ERROR", "DEBUG"]
+    endpoints = ["/api/v1/products", "/api/v1/orders", "/api/v1/users", "/healthcheck"]
+    users = ["alice", "bob", "carol", "dave", "eve"]
+    error_stack_trace = """Traceback (most recent call last):
+      File "log_generator.py", line 45, in <module>
+        simulate_error()
+      File "log_generator.py", line 44, in simulate_error
+        1 / 0
+    ZeroDivisionError: division by zero"""
+
+    def generate_log_line():
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        level = random.choice(log_levels)
+        user = random.choice(users)
+        if level == "ERROR":
+            message = (
+                "Exception occurred while processing request\n"
+                "Request: POST /api/v1/orders\n"
+                "Payload: {'order_id': 1234, 'items': ['book', 'pen'], 'user': '%s'}\n"
+                "Stack trace:\n%s" % (user, error_stack_trace)
+            )
+        elif level == "WARN":
+            message = (
+                "Warning: High response latency detected for endpoint %s\n"
+                "Latency: %.2f seconds\n"
+                "User: %s" % (random.choice(endpoints), random.uniform(0.5, 3.0), user)
+            )
+        elif level == "DEBUG":
+            message = (
+                "Request received\n"
+                "Method: GET\n"
+                "Endpoint: %s\n"
+                "User: %s\n"
+                "Headers: { 'Authorization': 'Bearer token123', 'Content-Type': 'application/json' }\n"
+                "Body: { 'example': 'data' }" % (random.choice(endpoints), user)
+            )
+        else:
+            message = (
+                "User %s successfully accessed endpoint %s\n"
+                "Request ID: %s\n"
+                "Response Time: %.2f ms\n"
+                "Status: 200 OK" % (user, random.choice(endpoints), random.randint(1000,9999), random.uniform(100, 500))
+            )
+        return f"{timestamp} {level} {message}"
+
+    while True:
+        print(generate_log_line())
+        time.sleep(1)
