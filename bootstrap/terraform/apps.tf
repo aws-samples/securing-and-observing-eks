@@ -56,8 +56,6 @@ resource "kubernetes_service_account_v1" "collector" {
   depends_on = [module.eks]
 }
 
-
-
 resource "kubernetes_deployment_v1" "threat" {
   metadata {
     name      = "threat"
