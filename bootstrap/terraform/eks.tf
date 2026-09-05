@@ -42,14 +42,11 @@ module "eks" {
 
   tags = local.tags
 
-  # Both agent addons need their backend authorized before they start, or they come
-  # up unable to publish: the NFM agent needs its IAM policy attached, and the
-  # GuardDuty agent crashloops on AccessDeniedException until Runtime Monitoring
-  # is enabled on the detector.
+  # The NFM policy must be attached before the agent addon starts, otherwise the
+  # agent comes up unable to publish telemetry.
   depends_on = [
     aws_vpc_endpoint.guardduty,
     aws_iam_role_policy_attachment.nfm_agent,
-    aws_guardduty_detector_feature.eks_runtime_monitoring,
   ]
 
 }
