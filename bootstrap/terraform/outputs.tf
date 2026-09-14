@@ -16,7 +16,3 @@ output "nfm_monitor_arn" {
   value       = aws_networkflowmonitor_monitor.cluster.monitor_arn
 }
 
-output "verify_nfm_agent" {
-  description = "Confirm the Network Flow Monitor agent pods are running."
-  value       = "kubectl get pods -A -l app.kubernetes.io/name=aws-network-flow-monitoring-agent"
-}
